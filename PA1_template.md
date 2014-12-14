@@ -57,6 +57,18 @@ ggplot(stepsByInterval, aes(x=interval, y=steps)) + geom_line()
 
 ![plot of chunk unnamed-chunk-5](figure/unnamed-chunk-5-1.png) 
 
+Find the 5-minute interval which on average across all the days in the dataset, contains the maximum number of steps 
+
+```r
+sapply(stepsByInterval, function(x) max(as.numeric(x)))
+```
+
+```
+##  interval     steps 
+## 2355.0000  206.1698
+```
+
+
 The number of missing values in the dataset
 
 ```r
@@ -68,6 +80,7 @@ sum(is.na(data$steps))
 ```
 
 New dataset with missing values filled the average of that interval
+Average of the same interval is used to fill the missing values
 
 ```r
 filledData = data
@@ -81,7 +94,6 @@ sum(is.na(data$steps))
 ```r
 for(i in 1:nrow(data)) {
   if(is.na(data$steps[i])) {
-    #print(data$steps[i])
     filledData$steps[i] <- filter(stepsByInterval, interval == data$interval[i])$steps
   }
 }
@@ -96,7 +108,7 @@ names(filledStepsByDate) <- c("date", "steps")
 qplot(date, steps, data=filledStepsByDate, geom="histogram", stat="identity")
 ```
 
-![plot of chunk unnamed-chunk-8](figure/unnamed-chunk-8-1.png) 
+![plot of chunk unnamed-chunk-9](figure/unnamed-chunk-9-1.png) 
 
 Mean of the total number of steps taken each day
 
@@ -143,7 +155,7 @@ names(stepsByInterval) <- c("interval", "weekday", "steps")
 ggplot(stepsByInterval, aes(x=interval, y=steps)) + geom_line() + facet_grid(weekday ~ .)
 ```
 
-![plot of chunk unnamed-chunk-12](figure/unnamed-chunk-12-1.png) 
+![plot of chunk unnamed-chunk-13](figure/unnamed-chunk-13-1.png) 
 
 
 

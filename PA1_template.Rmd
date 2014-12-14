@@ -36,18 +36,24 @@ names(stepsByInterval) <- c("interval", "steps")
 ggplot(stepsByInterval, aes(x=interval, y=steps)) + geom_line()
 ```
 
+Find the 5-minute interval which on average across all the days in the dataset, contains the maximum number of steps 
+```{r}
+sapply(stepsByInterval, function(x) max(as.numeric(x)))
+```
+
+
 The number of missing values in the dataset
 ```{r}
 sum(is.na(data$steps))
 ```
 
 New dataset with missing values filled the average of that interval
+Average of the same interval is used to fill the missing values
 ```{r}
 filledData = data
 sum(is.na(data$steps))
 for(i in 1:nrow(data)) {
   if(is.na(data$steps[i])) {
-    #print(data$steps[i])
     filledData$steps[i] <- filter(stepsByInterval, interval == data$interval[i])$steps
   }
 }
